@@ -1,0 +1,114 @@
+# Sample workflow for building and deploying a Jekyll site to GitHub Pages
+name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+            - name: Setup Node.js environment
+  uses: actions/setup-node@v4.0.2
+  with:
+    # Set always-auth in npmrc.
+    always-auth: # optional, default is false
+    # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
+    node-version: # optional
+    # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
+    node-version-file: # optional
+    # Target architecture for Node to use. Examples: x86, x64. Will use system architecture by default.
+    architecture: # optional
+    # Set this option if you want the action to check for the latest available version that satisfies the version spec.
+    check-latest: # optional
+    # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN.
+    registry-url: # optional
+    # Optional scope for authenticating against scoped registries. Will fall back to the repository owner when using the GitHub Packages registry (https://npm.pkg.github.com/).
+    scope: # optional
+    # Used to pull node distributions from node-versions. Since there's a default, this is typically not supplied by the user. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
+    token: # optional, default is ${{ github.server_url == 'https://github.com' && github.token || '' }}
+    # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm.
+    cache: # optional
+    # Used to specify the path to a dependency file: package-lock.json, yarn.lock, etc. Supports wildcards or a list of file names for caching multiple dependencies.
+    cache-dependency-path: # optional
+            - name: Await Taktile Deployment
+  # You may pin to the exact commit or the version.
+  # uses: taktile-org/await-taktile-deployment-action@3ebb7b87b16f94e8c87c7b546dc002006d57f708
+  uses: taktile-org/await-taktile-deployment-action@v0.3.0
+  with:
+    # Your Taktile API key
+    TKTL_API_KEY: 
+    # Long commit hash of the deployment. If not set GITHUB_SHA is used
+    DEPLOY_SHA: # optional
+                - name: Deploy to Algorithmia
+  # You may pin to the exact commit or the version.
+  # uses: algorithmiaio/algorithmia-modeldeployment-action@14310c6bd07101452e0a1bc435aa2e306e62aa30
+  uses: algorithmiaio/algorithmia-modeldeployment-action@1.1.0
+  with:
+    # Algorithmia API Key, used when uploading the model file
+    algorithmia_api_key: 
+    # Algorithmia Username, used as Git Commit Username and as part of default model upload path
+    algorithmia_username: 
+    # Algorithmia Email, used as Git Commit Email
+    algorithmia_email: # optional, default is githubactions@placeholder.email
+    # Algorithmia Password. Only required if the algorithm is hosted on Algorithmia.
+    algorithmia_password: # optional
+    # Github username owning the algorithm repository, used to clone the algorithm repository. Only required if the algorithm is hosted on Github.
+    github_username: # optional
+    # Github Personal Access Token, used to clone the algorithm repository. Only required if the algorithm is hosted on Github.
+    github_pat: # optional
+    # Algorithmia Algorithm name
+    algorithmia_algoname: 
+    # Algorithmia data collection name to upload the model file
+    algorithmia_uploadpath: # default is data://$ALGORITHMIA_USERNAME/$ALGORITHMIA_ALGONAME
+    # Path of the model file to be uploaded to Algorithmia
+    model_path: # default is model.pkl
+    # Path of the notebook to be executed by this action
+    notebook_path: # optional, default is model_training.ipynb
+    # Git host for the Algorithmia algorithm repository. Change to git.algorithmia.com if the algorithm is hosted on Algorithmia Marketplace or git.YOUR_DOMAIN for enterprise installations.
+    git_host: # optional, default is github.com
+    # API endpoint Algorithmia installation, for enterprise customers.
+    algorithmia_api: # optional, default is https://api.algorithmia.com
+                
+          
